@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Respondo — AI sales agent for clothing resellers
 
-## Getting Started
+An AI agent for one-person clothing resellers in Mexico. Customers ask about items in a
+chat; the agent answers only from real catalog data and assembles a basket. Nothing
+becomes an order until a human confirms it.
 
-First, run the development server:
+Built for the AI-101 Summer Intensive at IBERO.
+
+## Pages
+
+| Route | Week | What it is |
+|---|---|---|
+| `/` | 0 | Homepage and eight-week roadmap |
+| `/docs` | 0 | Documentation placeholder |
+| `/core` | 1 | The chat agent, basket and human handoff |
+| `/core/prompts` | 1 | Prompt library — every prompt version and why it changed |
+| `/research` | 2 | Benchmarks, competitors, risk map, research log |
+
+## Stack
+
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · zod · Vitest ·
+Groq (`openai/gpt-oss-120b`) · Supabase · Vercel
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in your own values. `.env.local` is
+gitignored and must never be committed.
+
+| Variable | What it is |
+|---|---|
+| `MODEL_PROVIDER` | `groq` or `gemini` — selects which client to use |
+| `MODEL_ID` | Model identifier, e.g. `openai/gpt-oss-120b` |
+| `GROQ_API_KEY` | Groq API key, from console.groq.com |
+| `GEMINI_API_KEY` | Google AI Studio API key (optional fallback) |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase secret key — server-side only, never `NEXT_PUBLIC_` |
+
+The same six must be set in Vercel under Settings → Environment Variables. Vercel
+cannot read `.env.local`.
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in your values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the forwarded port. `/` redirects nowhere — it is the homepage.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Database schema is in `supabase/schema.sql`. Run it in the Supabase SQL editor.
+Row-level security is intentionally off: every database call runs server-side through
+Route Handlers using the secret key, which bypasses RLS regardless.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tests
 
-## Learn More
+```bash
+npm test          # Vitest, no network required
+npx tsc --noEmit  # type check across every file
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The WhatsApp conversation at `/core` is simulated in the browser and labelled as such.
+The Meta Cloud API requires Business verification and template approval, and its free
+tier only messages pre-verified numbers — so a real integration could not be used by
+anyone evaluating this. The conversation logic is real; only the transport is simulated.

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -15,14 +17,19 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Boutique Copy",
-  description: "Channel-specific sales drafts generated from garment data.",
+  title: "Respondo — AI sales agent for clothing resellers",
+  description:
+    "An AI agent that answers customer questions from real catalog data and builds a basket, with a human confirming every order.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <NavBar />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
