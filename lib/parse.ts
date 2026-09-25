@@ -7,13 +7,22 @@ export class ParseError extends Error {
   }
 }
 
-const draftsSchema = z.object({
-  instagram: z.string().trim().min(1),
-  facebook: z.string().trim().min(1),
-  whatsapp: z.string().trim().min(1),
+const basketLineSchema = z.object({
+  itemId: z.string().min(1),
+  name: z.string().min(1),
+  size: z.string().min(1),
+  qty: z.coerce.number().int().positive(),
+  priceMxn: z.coerce.number().nonnegative(),
 });
 
-export type Drafts = z.infer<typeof draftsSchema>;
+const chatSchema = z.object({
+  reply: z.string().trim().min(1),
+  basket: z.array(basketLineSchema),
+  gaps: z.string(),
+});
+
+export type BasketLine = z.infer<typeof basketLineSchema>;
+export type ChatResult = z.infer<typeof chatSchema>;
 
 export function stripFences(raw: string): string {
   let s = raw.trim();
@@ -24,7 +33,7 @@ export function stripFences(raw: string): string {
   return s;
 }
 
-export function parseModelResponse(raw: string): Drafts {
+export function parseChatResponse(raw: string): ChatResult {
   const cleaned = stripFences(raw);
 
   let json: unknown;
@@ -34,9 +43,9 @@ export function parseModelResponse(raw: string): Drafts {
     throw new ParseError("The model response is not valid JSON.");
   }
 
-  const result = draftsSchema.safeParse(json);
+  const result = chatSchema.safeParse(json);
   if (!result.success) {
-    throw new ParseError("The JSON does not contain all three channels as non-empty strings.");
+    throw new ParseError("The JSON does not match the expected reply/basket/gaps shape.");
   }
   return result.data;
 }

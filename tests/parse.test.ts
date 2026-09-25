@@ -1,34 +1,41 @@
 import { describe, it, expect } from "vitest";
-import { parseModelResponse, ParseError } from "@/lib/parse";
+import { parseChatResponse, ParseError } from "@/lib/parse";
 
-const valid = { instagram: "a", facebook: "b", whatsapp: "c" };
+const valid = {
+  reply: "Yes, M is in stock.",
+  basket: [{ itemId: "BL-001", name: "Blouse", size: "M", qty: 1, priceMxn: 690 }],
+  gaps: "none",
+};
 
-describe("parseModelResponse", () => {
+describe("parseChatResponse", () => {
   it("accepts bare JSON", () => {
-    expect(parseModelResponse(JSON.stringify(valid))).toEqual(valid);
+    expect(parseChatResponse(JSON.stringify(valid))).toEqual(valid);
   });
 
   it("accepts JSON wrapped in markdown fences", () => {
-    expect(parseModelResponse("```json\n" + JSON.stringify(valid) + "\n```")).toEqual(valid);
+    expect(parseChatResponse("```json\n" + JSON.stringify(valid) + "\n```")).toEqual(valid);
+  });
+
+  it("accepts an empty basket", () => {
+    const empty = { ...valid, basket: [] };
+    expect(parseChatResponse(JSON.stringify(empty)).basket).toEqual([]);
   });
 
   it("rejects a missing key", () => {
-    expect(() => parseModelResponse('{"instagram":"a","facebook":"b"}')).toThrow(ParseError);
+    expect(() => parseChatResponse('{"reply":"hi","gaps":"none"}')).toThrow(ParseError);
   });
 
-  it("rejects a non-string value", () => {
-    expect(() =>
-      parseModelResponse('{"instagram":"a","facebook":"b","whatsapp":42}')
-    ).toThrow(ParseError);
+  it("rejects a basket line without a size", () => {
+    const bad = { ...valid, basket: [{ itemId: "BL-001", name: "Blouse", qty: 1, priceMxn: 690 }] };
+    expect(() => parseChatResponse(JSON.stringify(bad))).toThrow(ParseError);
   });
 
-  it("rejects an empty channel", () => {
-    expect(() =>
-      parseModelResponse('{"instagram":"a","facebook":"b","whatsapp":"  "}')
-    ).toThrow(ParseError);
+  it("rejects a zero quantity", () => {
+    const bad = { ...valid, basket: [{ ...valid.basket[0], qty: 0 }] };
+    expect(() => parseChatResponse(JSON.stringify(bad))).toThrow(ParseError);
   });
 
   it("rejects non-JSON", () => {
-    expect(() => parseModelResponse("sorry, I cannot")).toThrow(ParseError);
+    expect(() => parseChatResponse("sorry, I cannot")).toThrow(ParseError);
   });
 });

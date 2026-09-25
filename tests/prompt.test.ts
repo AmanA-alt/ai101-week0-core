@@ -1,28 +1,32 @@
 import { describe, it, expect } from "vitest";
-import { buildPrompt } from "@/lib/prompt";
+import { buildChatPrompt } from "@/lib/prompt";
 
-describe("buildPrompt", () => {
-  it("includes every supplied field", () => {
-    const p = buildPrompt({ itemName: "Blouse", fabric: "linen", colors: "bone" });
-    expect(p).toContain("Blouse");
-    expect(p).toContain("linen");
-    expect(p).toContain("bone");
+const msgs = [{ role: "customer" as const, text: "do you have the blouse in M?" }];
+
+describe("buildChatPrompt", () => {
+  it("includes the catalog", () => {
+    const p = buildChatPrompt(msgs);
+    expect(p).toContain("Short-sleeve linen blouse");
+    expect(p).toContain("BL-001");
   });
 
-  it("omits blank fields entirely", () => {
-    const p = buildPrompt({ itemName: "Blouse", fabric: "", colors: "   " });
-    expect(p).not.toContain("Fabric:");
-    expect(p).not.toContain("Colors:");
+  it("includes the conversation history", () => {
+    const p = buildChatPrompt(msgs);
+    expect(p).toContain("do you have the blouse in M?");
   });
 
   it("is deterministic", () => {
-    const attrs = { itemName: "Blouse", fabric: "linen" };
-    expect(buildPrompt(attrs)).toBe(buildPrompt(attrs));
+    expect(buildChatPrompt(msgs)).toBe(buildChatPrompt(msgs));
   });
 
-  it("forbids inventing attributes", () => {
-    const p = buildPrompt({ itemName: "Blouse" });
-    expect(p).toContain("Do not invent");
-    expect(p).toContain("artisanal");
+  it("forbids inventing stock and attributes", () => {
+    const p = buildChatPrompt(msgs);
+    expect(p).toContain("it is NOT available");
+    expect(p).toContain("Never state a price");
+  });
+
+  it("forbids the agent confirming an order", () => {
+    const p = buildChatPrompt(msgs);
+    expect(p).toContain("Never confirm an order yourself");
   });
 });
