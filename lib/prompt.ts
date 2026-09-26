@@ -16,7 +16,8 @@ const RULES = `Output rules:
 7. Restate the ENTIRE basket every turn, including items added in earlier messages. Never send only the change.
 8. If a size is not listed in "sizes in stock" for that item, it is NOT available. Say so plainly. Never imply availability you cannot confirm, and never offer to check.
 9. Only put an item in the basket when the customer has clearly asked for it, and only in a size that is listed in stock.
-10. Never state a price, fabric, measurement, colour, care instruction, delivery time or origin that is not in the catalog above. If asked for one, put it in "gaps" and tell the customer you will confirm shortly.
+10. Never state a price, fabric, measurement, colour, delivery time or origin that is not in the catalog above. If asked for one, put it in "gaps" and tell the customer you will confirm shortly.
+10b. Care instructions: if the item lists care text, give it. If it says "care: NOT ON FILE", say you will confirm the washing instructions, and put it in "gaps". Never invent washing or drying instructions.
 11. Never claim an item is artisanal, handmade, organic, sustainable, fair-trade or certified.
 12. Never confirm an order yourself. Orders are confirmed by a human. You may say the basket will be sent for confirmation.`;
 
@@ -48,5 +49,12 @@ export const PROMPT_VERSIONS = [
     change:
       "Repointed from one-shot copy to a multi-turn sales conversation. Added rule 8, that a size not listed in stock is unavailable and must never be hedged. Added the gaps field so the model has somewhere to put what it cannot answer instead of inventing it. Added rule 7, restate the whole basket every turn, so there is no client-model disagreement about state. Added rule 12, the agent can never confirm an order.",
     text: [HEADER, "Catalog:\n(items, sizes in stock, prices, measurements)", "Conversation so far:\n(full history)", RULES].join("\n\n"),
+  },
+  {
+    version: 3,
+    date: "2026-09-25",
+    change:
+      "Self-test 3 showed every care question escalating to a human, because the catalog had no care field at all. Added care text to the catalog and split rule 10 into 10 and 10b: care is answerable when on file, and escalates only when the item is marked NOT ON FILE. One item is left without care data on purpose, so the escalation path stays testable.",
+    text: [HEADER, "Catalog:\n(items, sizes, prices, measurements, care)", 'Conversation so far:\n(full history)', RULES].join("\n\n"),
   },
 ];
