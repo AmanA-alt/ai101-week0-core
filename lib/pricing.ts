@@ -1,13 +1,13 @@
 /**
- * Week 3 — pricing model.
+ * Pricing model.
  *
  * Every function here is pure: same inputs, same outputs, no network, no clock.
  * That is deliberate. The revenue arithmetic is the one part of this feature a
  * reviewer cannot verify by looking at the screen, so it has to be unit-testable
  * on its own. `tests/pricing.test.ts` covers it.
  *
- * Prices are derived from the Week 2 competitor research, not invented.
- * See ASSUMPTIONS below for where each number comes from.
+ * Prices are derived from competitor pricing, not invented. See ASSUMPTIONS
+ * below for where each number comes from.
  */
 
 export type TierId = "solo" | "negocio" | "taller";

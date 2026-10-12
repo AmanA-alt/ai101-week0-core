@@ -82,9 +82,9 @@ export default function PricingPage() {
           Three tiers, priced against what the market already charges.
         </h1>
         <p className="mt-6 max-w-[52ch] text-[clamp(1rem,1.6vw,1.15rem)] leading-relaxed text-[var(--muted)]">
-          Every price below traces to a competitor figure from the{" "}
+          Every price below traces to a figure in the{" "}
           <Link href="/research" className="underline underline-offset-4 hover:text-[var(--indigo)]">
-            Week 2 research
+            competitor study
           </Link>
           . Move the inputs to see what the business looks like at different adoption.
         </p>

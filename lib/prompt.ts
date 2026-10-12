@@ -54,7 +54,7 @@ export const PROMPT_VERSIONS = [
     version: 3,
     date: "2026-09-25",
     change:
-      "Self-test 3 showed every care question escalating to a human, because the catalog had no care field at all. Added care text to the catalog and split rule 10 into 10 and 10b: care is answerable when on file, and escalates only when the item is marked NOT ON FILE. One item is left without care data on purpose, so the escalation path stays testable.",
+      "Every care question was escalating to a human, because the catalog had no care field at all. Added care text to the catalog and split rule 10 into 10 and 10b: care is answerable when on file, and escalates only when the item is marked NOT ON FILE. One item is left without care data on purpose, so the escalation path stays testable.",
     text: [HEADER, "Catalog:\n(items, sizes, prices, measurements, care)", 'Conversation so far:\n(full history)', RULES].join("\n\n"),
   },
 ];

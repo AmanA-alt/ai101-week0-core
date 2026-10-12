@@ -9,8 +9,8 @@ import {
 } from "@/lib/pricing";
 
 /**
- * Week 3 — the two required pricing logic tests, plus the edge cases that
- * actually break revenue models. These run with no network and no DOM.
+ * Pricing logic: the revenue arithmetic plus the edge cases that actually
+ * break revenue models. These run with no network and no DOM.
  */
 
 describe("splitMix", () => {

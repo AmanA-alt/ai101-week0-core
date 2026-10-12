@@ -1,9 +1,8 @@
 /**
- * Week 3 — product architecture content.
+ * Product architecture content: segments and the capability map.
  *
- * Static and in the bundle for the same reason the Week 2 research data is:
- * this is my own analysis, so it changes with a code change, not with a form
- * submission. Only the saved pricing scenarios go to the database.
+ * Static and in the bundle because this is analysis, not user input — it
+ * changes with a code change. Only saved pricing scenarios go to the database.
  */
 
 import type { TierId } from "./pricing";
@@ -56,7 +55,7 @@ export const SEGMENTS: Segment[] = [
       },
       {
         heading: "Apartado is the unserved part",
-        body: "Layaway is standard in Mexican clothing retail and absent from every tool in the Week 2 study, because they were designed around US workflows. A boutique tracking it on paper is doing work no competitor has offered to take.",
+        body: "Layaway is standard in Mexican clothing retail and absent from every competitor we looked at, because they were designed around US workflows. A boutique tracking it on paper is doing work nobody has offered to take.",
       },
     ],
   },
@@ -66,7 +65,6 @@ export type Capability = {
   name: string;
   detail?: string;
   status: "live" | "planned";
-  week?: number;
   mexico?: boolean;
   tiers: TierId[];
 };
@@ -109,29 +107,27 @@ export const CAPABILITY_GROUPS: CapabilityGroup[] = [
       { name: "Manual entry", status: "live", tiers: ["solo", "negocio", "taller"] },
       {
         name: "Fabric and care detail",
-        detail: "Added after a self-test escalated every care question",
+        detail: "Fibre content and washing instructions, when on file",
         status: "live",
         tiers: ["solo", "negocio", "taller"],
       },
-      { name: "Bulk import from a sheet", status: "planned", week: 4, tiers: ["negocio", "taller"] },
+      { name: "Bulk import from a sheet", status: "planned", tiers: ["negocio", "taller"] },
     ],
   },
   {
     name: "Built for Mexico",
-    note: "Absent from every competitor studied",
+    note: "Not offered by any competitor we found",
     items: [
       {
         name: "Apartado tracking",
         detail: "Layaway is standard here and in no US-built tool",
         status: "planned",
-        week: 5,
         mexico: true,
         tiers: ["negocio", "taller"],
       },
       {
         name: "Same-day CDMX delivery logic",
         status: "planned",
-        week: 5,
         mexico: true,
         tiers: ["negocio", "taller"],
       },
@@ -141,8 +137,8 @@ export const CAPABILITY_GROUPS: CapabilityGroup[] = [
     name: "Scale",
     note: "Only once the core is proven",
     items: [
-      { name: "Shared inbox, multiple numbers", status: "planned", week: 6, tiers: ["negocio", "taller"] },
-      { name: "Monthly sales report", status: "planned", week: 7, tiers: ["taller"] },
+      { name: "Shared inbox, multiple numbers", status: "planned", tiers: ["negocio", "taller"] },
+      { name: "Monthly sales report", status: "planned", tiers: ["taller"] },
     ],
   },
 ];

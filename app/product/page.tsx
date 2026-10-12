@@ -6,7 +6,7 @@ import { TIERS, type TierId } from "@/lib/pricing";
 export const metadata = {
   title: "Product architecture — Respondo",
   description:
-    "Two customer segments, four capability groups and three tiers, built from the gaps found in the Week 2 competitor research.",
+    "Two customer segments, four capability groups and three tiers, built from the gaps competitors leave open.",
 };
 
 const TIER_IDS: TierId[] = ["solo", "negocio", "taller"];
@@ -20,11 +20,12 @@ export default function ProductPage() {
             Everything the agent can do, and who it is for.
           </h1>
           <p className="mt-6 max-w-[52ch] text-[clamp(1rem,1.6vw,1.15rem)] leading-relaxed text-[var(--muted)]">
-            Two segments, four capability groups, three tiers. Built from the gaps the{" "}
+            Two segments, four capability groups, three tiers. Built from the gaps left open by
+            every tool already serving this market — the{" "}
             <Link href="/research" className="underline underline-offset-4 hover:text-[var(--indigo)]">
-              Week 2 research
+              competitor study
             </Link>{" "}
-            found in every tool already serving this market.
+            has the detail.
           </p>
         </section>
       </Reveal>
@@ -98,7 +99,7 @@ export default function ProductPage() {
                   >
                     <span className="text-sm">
                       {item.name}
-                      <StatusChip status={item.status} week={item.week} mexico={item.mexico} />
+                      <StatusChip status={item.status} mexico={item.mexico} />
                       {item.detail && (
                         <em className="mt-0.5 block text-[12.5px] not-italic text-[var(--muted)]">
                           {item.detail}
@@ -142,11 +143,9 @@ export default function ProductPage() {
 
 function StatusChip({
   status,
-  week,
   mexico,
 }: {
   status: "live" | "planned";
-  week?: number;
   mexico?: boolean;
 }) {
   const base =
@@ -163,7 +162,7 @@ function StatusChip({
           : "border-[var(--line)] text-[var(--muted)]"
       }`}
     >
-      week {week}
+      planned
     </span>
   );
 }

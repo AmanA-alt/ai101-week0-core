@@ -2,20 +2,20 @@ import Link from "next/link";
 
 type Status = "shipped" | "building" | "planned";
 
-const ROADMAP: { week: number; title: string; note: string; status: Status }[] = [
-  { week: 0, title: "Builder infrastructure", note: "Repo, deploy pipeline, shell, docs placeholder", status: "shipped" },
-  { week: 1, title: "Generative core agent", note: "Chat agent, catalog grounding, basket, human handoff", status: "shipped" },
-  { week: 2, title: "Research and benchmarking", note: "Competitors, substitutes, risk map, validation", status: "shipped" },
-  { week: 3, title: "Product architecture and pricing", note: "Feature map, three tiers, revenue simulator", status: "shipped" },
-  { week: 4, title: "Catalog management", note: "Real inventory in, sizes at variant level", status: "planned" },
-  { week: 5, title: "Operator queue", note: "Review, edit and confirm baskets at volume", status: "planned" },
-  { week: 6, title: "WhatsApp integration", note: "Replace the simulated transport with the real API", status: "planned" },
-  { week: 7, title: "Pricing and launch", note: "Tiers, onboarding, first paying reseller", status: "planned" },
+const ROADMAP: { title: string; note: string; status: Status }[] = [
+  { title: "The agent", note: "Catalog-grounded replies, basket, human confirmation gate", status: "shipped" },
+  { title: "Market research", note: "Competitors, substitutes, risk map, validation", status: "shipped" },
+  { title: "Product architecture and pricing", note: "Feature map, three tiers, revenue simulator", status: "shipped" },
+  { title: "Catalog management", note: "Real inventory in, sizes at variant level", status: "building" },
+  { title: "Apartado tracking", note: "Layaway, which no competitor offers", status: "planned" },
+  { title: "Operator queue", note: "Review, edit and confirm baskets at volume", status: "planned" },
+  { title: "WhatsApp integration", note: "Replace the simulated transport with the real API", status: "planned" },
+  { title: "Launch", note: "Onboarding, billing, first paying reseller", status: "planned" },
 ];
 
 const PILL: Record<Status, { label: string; className: string }> = {
-  shipped: { label: "shipped", className: "border-[var(--thread)] text-[var(--thread)]" },
-  building: { label: "in progress", className: "border-[var(--caution)] text-[var(--caution)]" },
+  shipped: { label: "shipped", className: "border-[var(--indigo)] text-[var(--indigo)]" },
+  building: { label: "building", className: "border-[var(--caution)] text-[var(--caution)]" },
   planned: { label: "planned", className: "border-[var(--line)] text-[var(--muted)]" },
 };
 
@@ -47,10 +47,7 @@ export default function Home() {
         <h2 className="m-0 text-sm font-medium text-[var(--muted)]">Roadmap</h2>
         <ul className="mt-5 list-none divide-y divide-[var(--line)] p-0">
           {ROADMAP.map((r) => (
-            <li key={r.week} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-4">
-              <span className="mono w-14 shrink-0 text-xs text-[var(--muted)]">
-                Week {r.week}
-              </span>
+            <li key={r.title} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-4">
               <span className="min-w-[180px] flex-1 text-sm font-medium">{r.title}</span>
               <span className="min-w-[200px] flex-1 text-sm text-[var(--muted)]">{r.note}</span>
               <span
