@@ -5,8 +5,8 @@ type Status = "shipped" | "building" | "planned";
 const ROADMAP: { week: number; title: string; note: string; status: Status }[] = [
   { week: 0, title: "Builder infrastructure", note: "Repo, deploy pipeline, shell, docs placeholder", status: "shipped" },
   { week: 1, title: "Generative core agent", note: "Chat agent, catalog grounding, basket, human handoff", status: "shipped" },
-  { week: 2, title: "Research and benchmarking", note: "Competitors, substitutes, risk map, validation", status: "building" },
-  { week: 3, title: "Screenshot recognition", note: "Customer sends a photo instead of a product name", status: "planned" },
+  { week: 2, title: "Research and benchmarking", note: "Competitors, substitutes, risk map, validation", status: "shipped" },
+  { week: 3, title: "Product architecture and pricing", note: "Feature map, three tiers, revenue simulator", status: "shipped" },
   { week: 4, title: "Catalog management", note: "Real inventory in, sizes at variant level", status: "planned" },
   { week: 5, title: "Operator queue", note: "Review, edit and confirm baskets at volume", status: "planned" },
   { week: 6, title: "WhatsApp integration", note: "Replace the simulated transport with the real API", status: "planned" },
