@@ -1,19 +1,40 @@
 @import "tailwindcss";
 
+/*
+  Palette grounded in Mexican textile dye, not in a generic SaaS ramp.
+  Añil (indigo) carries structure and interaction; cochineal — the carmine
+  that was the country's most valuable export after silver — is the single
+  warm accent, used only where something needs to be noticed.
+
+  The --paper / --card / --thread names are kept as aliases so /core and
+  /research inherit the new palette without being rewritten.
+*/
 :root {
-  --paper: #eceee9;
-  --card: #fbfcfa;
-  --ink: #141815;
-  --muted: #6b736c;
-  --line: #d3d8d1;
-  --thread: #1f4d3d;
+  --bone: #f2f1ed;
+  --surface: #fbfbf9;
+  --ink: #17161a;
+  --muted: #6e6b74;
+  --line: #dedcd6;
+
+  --indigo: #243a68;
+  --indigo-soft: #e6e9f1;
+  --cochineal: #9b2340;
+  --cochineal-soft: #f5e7ea;
+
+  /* Aliases kept for pages built in weeks 0–2. */
+  --paper: var(--bone);
+  --card: var(--surface);
+  --thread: var(--indigo);
   --caution: #8a5a1a;
-  --over: #8c2f2a;
+  --over: var(--cochineal);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 html {
-  background: var(--paper);
+  background: var(--bone);
   color: var(--ink);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -27,11 +48,100 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Tabular figures anywhere a number changes under the reader's eye. */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
 :focus-visible {
-  outline: 2px solid var(--thread);
-  outline-offset: 2px;
+  outline: 2px solid var(--indigo);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/*
+  Scroll reveal. Narrative sections only — never the simulator, where motion
+  that the reader did not ask for just gets in the way of arithmetic.
+*/
+.rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+}
+.rv-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Motion that answers a user action: panes in the save flow, saved rows. */
+@keyframes pane-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes scrim-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slip-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+.anim-pane  { animation: pane-in 0.32s var(--ease); }
+.anim-sheet { animation: sheet-in 0.34s var(--ease); }
+.anim-scrim { animation: scrim-in 0.25s var(--ease); }
+.anim-slip  { animation: slip-in 0.5s var(--ease); }
+
+/* Range inputs: the one control the simulator lives on. */
+.slider {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  margin: 0;
+}
+.slider::-webkit-slider-runnable-track {
+  height: 3px;
+  background: var(--line);
+  border-radius: 2px;
+}
+.slider::-moz-range-track {
+  height: 3px;
+  background: var(--line);
+  border-radius: 2px;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--indigo);
+  cursor: pointer;
+  transition: transform 0.2s var(--ease);
+}
+.slider::-moz-range-thumb {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--indigo);
+  cursor: pointer;
+}
+.slider:active::-webkit-slider-thumb {
+  transform: scale(1.18);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+  .rv { opacity: 1; transform: none; }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
