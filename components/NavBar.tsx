@@ -4,6 +4,8 @@ const LINKS = [
   { href: "/", label: "Home" },
   { href: "/core", label: "Agent" },
   { href: "/research", label: "Research" },
+  { href: "/product", label: "Product" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
 ];
 
@@ -14,12 +16,12 @@ export default function NavBar() {
         <Link href="/" className="text-base font-medium tracking-tight">
           Respondo
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           {LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm text-[var(--muted)] hover:text-[var(--thread)]"
+              className="text-sm text-[var(--muted)] hover:text-[var(--indigo)]"
             >
               {l.label}
             </Link>
