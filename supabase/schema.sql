@@ -60,3 +60,26 @@ create table research_records (
 
 create index orders_created_at_idx on orders (created_at desc);
 create index research_records_created_at_idx on research_records (created_at desc);
+
+-- Week 3: saved pricing scenarios.
+-- The assumptions are stored alongside the result so a saved scenario stays
+-- comparable even after the live tier prices or default mix change.
+create table pricing_scenarios (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  preset text not null,
+  customers integer not null,
+  share_solo numeric not null,
+  share_negocio numeric not null,
+  share_taller numeric not null,
+  churn_pct numeric not null,
+  price_solo integer not null,
+  price_negocio integer not null,
+  price_taller integer not null,
+  mrr_mxn numeric not null,
+  arr_mxn numeric not null,
+  arpu_mxn numeric not null
+);
+
+create index pricing_scenarios_created_at_idx on pricing_scenarios (created_at desc);
