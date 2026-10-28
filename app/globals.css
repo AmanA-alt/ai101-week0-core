@@ -1,27 +1,37 @@
 @import "tailwindcss";
 
 /*
-  Palette grounded in Mexican textile dye, not in a generic SaaS ramp.
-  Añil (indigo) carries structure and interaction; cochineal — the carmine
-  that was the country's most valuable export after silver — is the single
-  warm accent, used only where something needs to be noticed.
+  Brand system, Week 4.
 
-  The --paper / --card / --thread names are kept as aliases so /core and
-  /research inherit the new palette without being rewritten.
+  Three colours carry the whole site and there is no fourth. The discipline is
+  borrowed from an analog, mid-century technical aesthetic — flat colour, a
+  light grotesque at large sizes, the column grid left visible rather than
+  hidden. The colours themselves are not borrowed: añil (indigo) and cochineal
+  are Mexican textile dyes, which is a palette this product can defend to the
+  customer it is actually for.
+
+    --indigo   structure, hero panels, body text on light, every interaction
+    --bone     page background, and text on anything dark
+    --deep     full-bleed sections that break the page
+    --cochineal  one accent, reserved for alerts and the live A/B state
+
+  The --paper / --card / --thread names are kept as aliases so the pages built
+  in weeks 0–3 inherit this without being rewritten.
 */
 :root {
-  --bone: #f2f1ed;
-  --surface: #fbfbf9;
-  --ink: #17161a;
-  --muted: #6e6b74;
-  --line: #dedcd6;
+  --bone: #e4e2df;
+  --surface: #eeedea;
+  --ink: #1d1c18;
+  --deep: #2a281f;
+  --muted: #6b6a62;
+  --line: #cfccc5;
 
   --indigo: #243a68;
-  --indigo-soft: #e6e9f1;
+  --indigo-soft: #dfe3ec;
   --cochineal: #9b2340;
-  --cochineal-soft: #f5e7ea;
+  --cochineal-soft: #f0e2e5;
 
-  /* Aliases kept for pages built in weeks 0–2. */
+  /* Aliases kept for pages built in weeks 0–3. */
   --paper: var(--bone);
   --card: var(--surface);
   --thread: var(--indigo);
@@ -38,7 +48,7 @@ html {
 }
 
 body {
-  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   margin: 0;
 }
@@ -54,6 +64,16 @@ body {
   font-feature-settings: "tnum" 1;
 }
 
+/*
+  Display type. The reference sets its headlines light and tight; at 300 weight
+  a grotesque needs negative tracking or the counters read as gaps.
+*/
+.display {
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
 :focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
@@ -61,8 +81,38 @@ body {
 }
 
 /*
+  The column grid, left visible.
+
+  A fixed overlay rather than a per-section background, so the rules line up
+  down the whole page instead of restarting inside every container. Twelve
+  columns on desktop, four below 768px, because twelve hairlines on a phone is
+  noise. pointer-events are off so it never intercepts a click.
+*/
+.colrules {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--ink) 7%, transparent) 0 1px,
+    transparent 1px calc(100% / 12)
+  );
+}
+
+@media (max-width: 768px) {
+  .colrules {
+    background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--ink) 6%, transparent) 0 1px,
+      transparent 1px calc(100% / 4)
+    );
+  }
+}
+
+/*
   Scroll reveal. Narrative sections only — never the simulator, where motion
-  that the reader did not ask for just gets in the way of arithmetic.
+  the reader did not ask for just gets in the way of arithmetic.
 */
 .rv {
   opacity: 0;
@@ -72,6 +122,29 @@ body {
 .rv-in {
   opacity: 1;
   transform: none;
+}
+
+/*
+  Stepped reveal, the reference's signature move: content enters through a
+  staircase mask rather than a straight wipe.
+
+  clip-path is animated rather than width or height because the browser can
+  composite it off the main thread. The reference drives the same effect from
+  scroll position, which runs work on every scroll event and visibly drops
+  frames on a mid-range laptop; this fires once on entry and then stops.
+*/
+@keyframes step-in {
+  from {
+    clip-path: polygon(0 0, 25% 0, 25% 100%, 0 100%);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+  }
+}
+.anim-step {
+  animation: step-in 0.72s var(--ease) both;
 }
 
 /* Motion that answers a user action: panes in the save flow, saved rows. */
@@ -140,6 +213,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rv { opacity: 1; transform: none; }
+  .anim-step { clip-path: none; opacity: 1; }
   * {
     transition: none !important;
     animation: none !important;
