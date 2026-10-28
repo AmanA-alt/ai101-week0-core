@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { assignVariant } from "@/lib/ab";
 import { HEADLINES, CTAS, LANDING, t, type Lang } from "@/lib/marketing-data";
-import { useVisitorId, useLang, useImpression, sendEvent } from "./useClientState";
+import { useVisitorId, useImpression, sendEvent } from "./useClientState";
 
 /**
  * The live half of the landing hero.
@@ -20,9 +20,16 @@ import { useVisitorId, useLang, useImpression, sendEvent } from "./useClientStat
  * looks broken and corrupts the thing being measured. The block reserves its
  * height so nothing below it moves.
  */
-export default function HeroExperiment() {
+export default function HeroExperiment({
+  lang,
+  setLang,
+  langReady,
+}: {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  langReady: boolean;
+}) {
   const visitorId = useVisitorId();
-  const [lang, setLang, langReady] = useLang();
 
   const headlineVariant = useMemo(
     () => (visitorId ? assignVariant(visitorId, "headline") : null),
