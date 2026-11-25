@@ -22,9 +22,12 @@ const orderSchema = z.object({
 });
 
 export async function GET() {
+  // Public route on a site with no login: return only what the pending list
+  // shows. Never the transcript and never the customer label, which are what
+  // a customer actually wrote. tests/regression checks this stays true.
   const { data, error } = await supabaseServer()
     .from("orders")
-    .select("*")
+    .select("id, created_at, status, item_count, subtotal_mxn")
     .order("created_at", { ascending: false })
     .limit(10);
 

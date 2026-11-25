@@ -10,7 +10,6 @@ type Line = { itemId: string; name: string; size: string; qty: number; priceMxn:
 type Order = {
   id: string;
   created_at: string;
-  customer_label: string | null;
   item_count: number;
   subtotal_mxn: number;
   status: string;
@@ -311,7 +310,7 @@ export default function CorePage() {
           <ul className="mt-3 list-none divide-y divide-[var(--line)] p-0">
             {orders.map((o) => (
               <li key={o.id} className="flex flex-wrap items-baseline justify-between gap-2 py-3">
-                <span className="text-sm">{o.customer_label ?? "Customer"}</span>
+                <span className="text-sm">Basket</span>
                 <span className="mono text-xs text-[var(--muted)]">
                   {o.item_count} items · ${o.subtotal_mxn} MXN ·{" "}
                   {new Date(o.created_at).toLocaleDateString("en-GB")}
