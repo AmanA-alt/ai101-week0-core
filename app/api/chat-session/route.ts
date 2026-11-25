@@ -139,15 +139,19 @@ export async function POST(request: Request) {
   });
 }
 
-/** Recent sessions, for the evidence panel on the page. */
-export async function GET() {
-  const supabase = supabaseServer();
-  const { data, error } = await supabase
-    .from("chat_sessions")
-    .select("id, created_at, lang, intake, turns, guardrail_hits, total_mxn, status")
-    .order("created_at", { ascending: false })
-    .limit(10);
+/*
+  There is deliberately no GET here.
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ rows: data ?? [] });
-}
+  The first version of this file had one, returning the ten most recent
+  sessions for an evidence panel I never built. Nothing called it, and it was
+  reachable by anyone who opened /chat and guessed the URL, which would have
+  let one customer read another customer's intake answers and basket total.
+
+  Row level security would not have caught it. Every query in this project runs
+  with the service role key, which bypasses RLS by design, so the policy would
+  never have been consulted. The fix for an endpoint that returns too much is
+  to not write the endpoint.
+
+  Evidence for the submission comes from the Supabase table editor, which is
+  where it should come from: the place that already requires a login.
+*/
