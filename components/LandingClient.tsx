@@ -6,6 +6,8 @@ import { useLang } from "./useClientState";
 import HeroExperiment from "./HeroExperiment";
 import ColumnRules from "./ColumnRules";
 import Reveal from "./Reveal";
+import PullQuote from "./PullQuote";
+import FlowDiagram from "./FlowDiagram";
 
 /**
  * The landing page.
@@ -88,20 +90,36 @@ export default function LandingClient() {
         </div>
       </section>
 
-      <main className="relative z-[1] mx-auto max-w-5xl px-6">
-        <section className="grid gap-8 border-b border-[var(--line)] py-16 md:grid-cols-3 md:py-20">
-          {LANDING.props.map((p, i) => (
-            <Reveal key={p.title.en} delay={i * 70}>
-              <h2 className="m-0 text-[1.05rem] font-medium tracking-[-0.01em]">{t(p.title, lang)}</h2>
-              <p className="m-0 mt-2 text-[14px] leading-relaxed text-[var(--muted)]">
-                {t(p.body, lang)}
-              </p>
-            </Reveal>
-          ))}
+      <main className="relative z-[1]">
+        <div className="mx-auto max-w-5xl px-6">
+          <section className="grid gap-8 py-16 md:grid-cols-3 md:py-20">
+            {LANDING.props.map((p, i) => (
+              <Reveal key={p.title.en} delay={i * 70}>
+                <h2 className="m-0 text-[1.05rem] font-medium tracking-[-0.01em]">{t(p.title, lang)}</h2>
+                <p className="m-0 mt-2 text-[14px] leading-relaxed text-[var(--muted)]">
+                  {t(p.body, lang)}
+                </p>
+              </Reveal>
+            ))}
+          </section>
+        </div>
+
+        <PullQuote lang={lang} />
+
+        <div className="mx-auto max-w-5xl px-6">
+        <section className="border-b border-[var(--line)] py-16 md:py-20">
+          <Reveal step>
+            <h2 className="display m-0 text-[clamp(1.5rem,3vw,2.1rem)] text-[var(--indigo)]">
+              {lang === "es" ? "Cómo funciona" : "How it works"}
+            </h2>
+          </Reveal>
+          <Reveal step delay={90} className="mt-10">
+            <FlowDiagram lang={lang} />
+          </Reveal>
         </section>
 
         <section className="py-16 md:py-20">
-          <Reveal>
+          <Reveal step>
             <h2 className="display m-0 text-[clamp(1.5rem,3vw,2.1rem)] text-[var(--indigo)]">
               {lang === "es" ? "Qué funciona hoy" : "What works today"}
             </h2>
@@ -135,6 +153,7 @@ export default function LandingClient() {
             </p>
           </Reveal>
         </section>
+        </div>
       </main>
     </>
   );

@@ -18,11 +18,20 @@ export default function Reveal({
   children,
   delay = 0,
   className = "",
+  step = false,
 }: {
   children: ReactNode;
   /** Stagger, in ms. Keep small — this is a sequence, not a performance. */
   delay?: number;
   className?: string;
+  /**
+   * Enter through the staircase mask instead of the default rise.
+   *
+   * This is the brand's signature move, so it is reserved for the things that
+   * open a section — a heading, the pull quote, the diagram — and never applied
+   * to a list of items, where five staircases at once reads as a slot machine.
+   */
+  step?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
@@ -52,12 +61,20 @@ export default function Reveal({
     return () => io.disconnect();
   }, []);
 
+  const motion = step
+    ? shown
+      ? "anim-step"
+      : "rv-step"
+    : `rv ${shown ? "rv-in" : ""}`;
+
+  const style = shown && delay
+    ? step
+      ? { animationDelay: `${delay}ms` }
+      : { transitionDelay: `${delay}ms` }
+    : undefined;
+
   return (
-    <div
-      ref={ref}
-      className={`rv ${shown ? "rv-in" : ""} ${className}`}
-      style={shown && delay ? { transitionDelay: `${delay}ms` } : undefined}
-    >
+    <div ref={ref} className={`${motion} ${className}`} style={style}>
       {children}
     </div>
   );

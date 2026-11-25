@@ -125,6 +125,16 @@ body {
 }
 
 /*
+  The pre-entry state for a stepped reveal. Kept out of .rv because the two
+  cannot share: .rv transitions opacity, and step-in animates it, so an element
+  carrying both fights itself. Made visible again under reduced motion below,
+  so content is never gated behind an effect that will not run.
+*/
+.rv-step {
+  opacity: 0;
+}
+
+/*
   Stepped reveal, the reference's signature move: content enters through a
   staircase mask rather than a straight wipe.
 
@@ -213,6 +223,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rv { opacity: 1; transform: none; }
+  .rv-step { opacity: 1; }
   .anim-step { clip-path: none; opacity: 1; }
   * {
     transition: none !important;

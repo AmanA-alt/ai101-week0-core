@@ -126,6 +126,77 @@ export const LANDING = {
   } satisfies Localized,
 };
 
+/* ------------------------------------------------------------- pull quote */
+
+/**
+ * The one line the dark band carries.
+ *
+ * One quotation and nothing else, which is the whole point of the device: a
+ * full-bleed section that breaks the page earns its weight by saying a single
+ * thing. A paragraph in here would just be a paragraph on a dark background.
+ */
+export const PULLQUOTE = {
+  text: {
+    es: "Nada se convierte en pedido hasta que una persona dice que sí.",
+    en: "Nothing becomes an order until a person says yes.",
+  } satisfies Localized,
+  attribution: {
+    es: "El principio que decide todo lo demás",
+    en: "The principle that decides everything else",
+  } satisfies Localized,
+};
+
+/* --------------------------------------------------------------- the flow */
+
+export type FlowStep = {
+  id: string;
+  label: Localized;
+  note: Localized;
+  /** The one step a person performs. Drawn in the accent, never decoration. */
+  human?: boolean;
+};
+
+/**
+ * The five steps the agent runs, as the diagram draws them.
+ *
+ * Content lives here rather than inside the SVG so the drawing stays a drawing
+ * and the words stay translatable, and so a missing translation is a compile
+ * error exactly as it is everywhere else on the site.
+ */
+export const FLOW: FlowStep[] = [
+  {
+    id: "catalog",
+    label: { es: "Catálogo", en: "Catalog" },
+    note: { es: "Tus prendas, tallas y precios", en: "Your items, sizes and prices" },
+  },
+  {
+    id: "agent",
+    label: { es: "Agente", en: "Agent" },
+    note: { es: "Responde solo con lo que ahí dice", en: "Answers only from what it says" },
+  },
+  {
+    id: "basket",
+    label: { es: "Pedido propuesto", en: "Proposed basket" },
+    note: { es: "Prendas, total y lo que falta", en: "Items, total and what is missing" },
+  },
+  {
+    id: "review",
+    label: { es: "Tú confirmas", en: "You confirm" },
+    note: { es: "El único paso que hace una persona", en: "The one step a person performs" },
+    human: true,
+  },
+  {
+    id: "order",
+    label: { es: "Pedido", en: "Order" },
+    note: { es: "No existe antes de este punto", en: "Does not exist before this point" },
+  },
+];
+
+export const FLOW_CAPTION = {
+  es: "No hay ninguna ruta de código que salte el cuarto paso.",
+  en: "There is no code path that skips the fourth step.",
+} satisfies Localized;
+
 /* ----------------------------------------------------------- social posts */
 
 export type Channel = "Instagram" | "Facebook" | "WhatsApp" | "TikTok";
