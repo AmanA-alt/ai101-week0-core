@@ -16,11 +16,10 @@
  * card nobody notices until it is live.
  */
 
-export type Lang = "es" | "en";
+export { LANGS, t } from "./i18n";
+export type { Lang, Localized } from "./i18n";
 
-export type Localized = { es: string; en: string };
-
-export const LANGS: Lang[] = ["es", "en"];
+import type { Lang, Localized } from "./i18n";
 
 /* ---------------------------------------------------------------- persona */
 
@@ -464,10 +463,6 @@ export const CALENDAR: CalendarDay[] = [
 ];
 
 /* --------------------------------------------------------------- helpers */
-
-export function t(value: Localized, lang: Lang): string {
-  return value[lang];
-}
 
 export const STAGE_LABEL: Record<Stage, Localized> = {
   awareness: { es: "Descubrimiento", en: "Awareness" },
