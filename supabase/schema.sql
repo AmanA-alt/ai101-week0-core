@@ -1,4 +1,4 @@
--- Respondo schema.
+-- Bastilla schema.
 --
 -- Row-level security is intentionally off on every table here. Each one is
 -- reached only from a Next.js Route Handler using the Supabase secret key,
@@ -107,3 +107,40 @@ create table if not exists marketing_assets (
 );
 
 create index if not exists marketing_assets_created_at_idx on marketing_assets (created_at desc);
+
+-- Week 5: the guided assistant at /chat.
+--
+-- Two tables rather than one. A session is written once, when the customer
+-- sends the basket for review; feedback can arrive afterwards, can arrive
+-- without a basket at all, and a customer may change their mind and rate it
+-- again. Folding the rating into the session row would have meant updating a
+-- record that is supposed to be a record of what happened.
+--
+-- Nothing in here is an order. status stays 'pending_review' because there is
+-- no code path in the project that confirms a sale.
+create table if not exists chat_sessions (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  visitor_id text not null,
+  lang text not null check (lang in ('es', 'en')),
+  intake jsonb,
+  turns integer not null default 0,
+  guardrail_hits integer not null default 0,
+  basket jsonb not null default '[]'::jsonb,
+  total_mxn integer not null default 0,
+  status text not null default 'pending_review'
+    check (status in ('pending_review', 'contacted', 'closed'))
+);
+
+create index if not exists chat_sessions_created_at_idx on chat_sessions (created_at desc);
+
+create table if not exists chat_feedback (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  session_id uuid references chat_sessions (id) on delete set null,
+  visitor_id text not null,
+  rating text not null check (rating in ('up', 'down')),
+  note text
+);
+
+create index if not exists chat_feedback_created_at_idx on chat_feedback (created_at desc);
