@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Ghost, { STATE_LABEL, type GhostState } from "@/components/Ghost";
 
 type Msg = { role: "customer" | "agent"; text: string };
 type Line = { itemId: string; name: string; size: string; qty: number; priceMxn: number };
@@ -38,6 +39,14 @@ export default function CorePage() {
   const [cooldown, setCooldown] = useState(0);
   const [orders, setOrders] = useState<Order[]>([]);
   const endRef = useRef<HTMLDivElement>(null);
+  // The ghost "talks" for a moment after each new reply, then settles.
+  const [replying, setReplying] = useState(false);
+  const replyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function flashReplying() {
+    setReplying(true);
+    if (replyTimer.current) clearTimeout(replyTimer.current);
+    replyTimer.current = setTimeout(() => setReplying(false), 1600);
+  }
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -95,6 +104,7 @@ export default function CorePage() {
       }
 
       setMessages([...next, { role: "agent", text: data.reply }]);
+      flashReplying();
       setBasket(data.basket ?? []);
       setGaps(data.gaps ?? "none");
     } catch {
@@ -128,6 +138,13 @@ export default function CorePage() {
 
   const subtotal = basket.reduce((s, l) => s + l.priceMxn * l.qty, 0);
   const busy = loading || cooldown > 0;
+  const ghostState: GhostState = sentId
+    ? "handoff"
+    : loading
+      ? "checking"
+      : replying
+        ? "talking"
+        : "idle";
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -145,6 +162,26 @@ export default function CorePage() {
         Simulated WhatsApp conversation. Not connected to the real WhatsApp API — the
         conversation and basket logic are real, only the transport is simulated.
       </p>
+
+      <div
+        className="mb-6 flex items-center gap-5 overflow-hidden rounded-[14px] bg-[var(--indigo)] px-5 py-4 text-[var(--bone)]"
+        aria-live="polite"
+      >
+        <Ghost size={68} state={ghostState} motion="loop" />
+        <div className="min-w-0">
+          <p className="mono m-0 text-[11px] uppercase tracking-[0.12em] text-[var(--bone)]/60">
+            Agent status
+          </p>
+          <p key={ghostState} className="anim-slip m-0 mt-1 text-lg font-light tracking-[-0.01em]">
+            {STATE_LABEL[ghostState]}
+          </p>
+          <p className="m-0 mt-0.5 text-[13px] text-[var(--bone)]/70">
+            {ghostState === "handoff"
+              ? "The basket is waiting for a person to confirm it."
+              : "Answers only from the catalog. Every basket waits for you."}
+          </p>
+        </div>
+      </div>
 
       <div className="grid gap-8 md:grid-cols-[3fr_2fr]">
         <section>

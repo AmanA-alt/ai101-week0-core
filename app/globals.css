@@ -116,8 +116,9 @@ body {
 */
 .rv {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 .rv-in {
   opacity: 1;
@@ -220,8 +221,241 @@ body {
   transform: scale(1.18);
 }
 
+/* ---------------------------------------------------------------------------
+   Product bar.
+   ------------------------------------------------------------------------- */
+:root { --ease-out: cubic-bezier(0.16, 1, 0.3, 1); }
+html { scroll-padding-top: 5rem; }
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bone) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
+}
+.navbar--scrolled {
+  border-bottom-color: var(--line);
+  box-shadow: 0 8px 24px -18px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--indigo);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-size: 1.02rem;
+}
+.nav-brand svg { transition: transform 0.5s var(--ease-out); }
+.nav-brand:hover svg { transform: translateY(-2px) rotate(-4deg); }
+.nav-sep {
+  width: 1px;
+  height: 16px;
+  margin: 0 10px;
+  background: var(--line);
+}
+.nav-tab {
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  color: var(--muted);
+  transition: color 0.35s var(--ease-out), background-color 0.35s var(--ease-out);
+}
+.nav-tab::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 1.5px;
+  background: var(--indigo);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.45s var(--ease-out);
+}
+.nav-tab:hover { color: var(--indigo); background: color-mix(in srgb, var(--indigo) 6%, transparent); }
+.nav-tab:hover::after { transform: scaleX(0.35); }
+.nav-tab[aria-current="page"] { color: var(--indigo); }
+.nav-tab[aria-current="page"]::after { transform: scaleX(1); }
+.nav-cta {
+  align-items: center;
+  white-space: nowrap;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--indigo);
+  color: var(--bone);
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--ink) 30%, transparent), inset 0 1px 0 color-mix(in srgb, var(--bone) 18%, transparent);
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 22px -12px var(--indigo); }
+.nav-cta-arrow { display: inline-block; transition: transform 0.35s var(--ease-out); }
+.nav-cta:hover .nav-cta-arrow { transform: translateX(3px); }
+.nav-burger {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.nav-burger span {
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  height: 1.5px;
+  background: var(--indigo);
+  transition: transform 0.4s var(--ease-out);
+}
+.nav-burger span:first-child { top: 17px; }
+.nav-burger span:last-child { top: 25px; }
+.nav-burger[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
+.nav-panel {
+  position: fixed;
+  inset: 64px 0 0 0;
+  overflow-y: auto;
+  background: var(--bone);
+}
+.nav-panel--open { animation: scrim-in 0.3s var(--ease-out); }
+.nav-panel-link {
+  display: block;
+  padding: 10px 0;
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out), color 0.3s;
+}
+.nav-panel--open .nav-panel-link { opacity: 1; transform: none; }
+.nav-panel-link[aria-current="page"] { color: var(--indigo); }
+
+/* Cards that respond to the pointer, gently. */
+.lift-card { transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out); }
+@media (hover: hover) {
+  .lift-card:hover { transform: translate3d(0, -4px, 0); box-shadow: 0 22px 40px -30px color-mix(in srgb, var(--ink) 60%, transparent); }
+}
+
+/* Soft light behind the hero mascot, in the brand's own bone. */
+.hero-halo {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 300px;
+  height: 300px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--bone) 16%, transparent) 0%, transparent 68%);
+}
+
+/* ---------------------------------------------------------------------------
+   Mascot. Transform and opacity only, eased on a sine curve, so the motion
+   reads as cloth drifting rather than a sprite bouncing.
+   ------------------------------------------------------------------------- */
+.ghost .ghost-body,
+.ghost .ghost-shadow,
+.ghost .ghost-gaze,
+.ghost .ghost-eye,
+.ghost .ghost-mouth,
+.ghost .ghost-tag {
+  transform-box: fill-box;
+  will-change: transform;
+}
+.ghost .ghost-body { transform-origin: 50% 100%; }
+.ghost .ghost-shadow { transform-origin: center; opacity: 0.12; }
+.ghost .ghost-eye { transform-origin: center; animation: ghost-blink 5.2s var(--ease) infinite; }
+.ghost .ghost-eye + .ghost-eye { animation-delay: 0.04s; }
+.ghost .ghost-mouth { transform-origin: center; animation: ghost-talk 0.42s ease-in-out infinite alternate; }
+.ghost .ghost-tag { transform-origin: 30% 0%; }
+
+/* loop: on duty, drifting */
+.ghost--loop .ghost-body { animation: ghost-drift 4.8s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+.ghost--loop .ghost-shadow { animation: ghost-shadow 4.8s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+
+/* once: rises in, settles, then only blinks */
+.ghost--once .ghost-body { animation: ghost-rise 1.1s var(--ease) both; }
+.ghost--once .ghost-shadow { animation: ghost-shadow-in 1.1s var(--ease) both; }
+
+/* none: still, eyes included */
+.ghost--none .ghost-eye { animation: none; }
+
+/* states */
+.ghost--checking .ghost-gaze { animation: ghost-scan 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+.ghost--checking .ghost-tag { animation: ghost-swing 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+.ghost--handoff .ghost-body { animation: ghost-handoff 0.9s var(--ease) both; }
+.ghost--handoff .ghost-tag { animation: ghost-flip 0.6s var(--ease) both; }
+
+@keyframes ghost-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(0, -5px, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -9px, 0) rotate(0deg); }
+  75% { transform: translate3d(0, -5px, 0) rotate(1deg); }
+}
+@keyframes ghost-shadow {
+  0%, 100% { transform: scaleX(1); opacity: 0.12; }
+  50% { transform: scaleX(0.82); opacity: 0.07; }
+}
+@keyframes ghost-rise {
+  from { transform: translate3d(0, 18px, 0); opacity: 0; }
+  to { transform: translate3d(0, 0, 0); opacity: 1; }
+}
+@keyframes ghost-shadow-in {
+  from { transform: scaleX(0.5); opacity: 0; }
+  to { transform: scaleX(1); opacity: 0.12; }
+}
+@keyframes ghost-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.12); }
+}
+@keyframes ghost-talk {
+  from { transform: scaleY(0.35); }
+  to { transform: scaleY(1.15); }
+}
+@keyframes ghost-scan {
+  0%, 100% { transform: translate3d(-4px, 0, 0); }
+  50% { transform: translate3d(4px, 0, 0); }
+}
+@keyframes ghost-swing {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(9deg); }
+}
+@keyframes ghost-handoff {
+  from { transform: translate3d(0, 0, 0); opacity: 1; }
+  to { transform: translate3d(0, -4px, 0); opacity: 0.55; }
+}
+@keyframes ghost-flip {
+  from { transform: rotateY(90deg); }
+  to { transform: rotateY(0deg); }
+}
+
+/*
+  Scroll-linked drift for the hero mascot. Progressive: browsers without
+  scroll-driven animations simply show it still, and nothing depends on it.
+*/
+@supports (animation-timeline: view()) {
+  .scroll-drift {
+    animation: scroll-drift linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
+  @keyframes scroll-drift {
+    to { transform: translate3d(0, -48px, 0); opacity: 0.35; }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .nav-panel-link { opacity: 1; transform: none; }
+  .ghost--once .ghost-body, .ghost--handoff .ghost-body { opacity: 1; transform: none; }
   .rv { opacity: 1; transform: none; }
   .rv-step { opacity: 1; }
   .anim-step { clip-path: none; opacity: 1; }

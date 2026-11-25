@@ -97,13 +97,13 @@ export default function PricingPage() {
               key={t.id}
               className={`flex flex-col rounded-[18px] bg-[var(--surface)] p-6 ${
                 t.lead
-                  ? "border-2 border-[var(--indigo)] p-[23px]"
+                  ? "border-2 border-[var(--indigo)] p-[23px] shadow-[0_18px_40px_-28px_var(--indigo)] lg:-translate-y-2"
                   : "border border-[var(--line)]"
               }`}
             >
               {t.lead && (
                 <span className="mb-3 self-start rounded-full bg-[var(--indigo)] px-3 py-1 text-xs text-white">
-                  Expected majority
+                  Recommended
                 </span>
               )}
               <p className="m-0 text-sm text-[var(--muted)]">{t.name}</p>

@@ -8,6 +8,8 @@ import ColumnRules from "./ColumnRules";
 import Reveal from "./Reveal";
 import PullQuote from "./PullQuote";
 import FlowDiagram from "./FlowDiagram";
+import Ghost from "./Ghost";
+import { HowItWorks, ExampleChat, Promises, PricingTeaser, ClosingBand } from "./LandingSections";
 
 /**
  * The landing page.
@@ -85,8 +87,14 @@ export default function LandingClient() {
       <ColumnRules />
 
       <section className="relative z-[1] bg-[var(--indigo)] text-[var(--bone)]">
-        <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-20 md:grid-cols-[1.5fr_1fr] md:py-28">
           <HeroExperiment lang={lang} setLang={setLang} langReady={langReady} />
+          <div className="relative order-first flex justify-center md:order-none">
+            <div className="hero-halo" aria-hidden="true" />
+            <div className="scroll-drift">
+              <Ghost size={230} state="idle" motion="loop" label="Bastilla mascot" className="h-auto w-[132px] md:w-[230px]" />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -117,6 +125,11 @@ export default function LandingClient() {
             <FlowDiagram lang={lang} />
           </Reveal>
         </section>
+
+        <HowItWorks lang={lang} />
+        <ExampleChat lang={lang} />
+        <Promises lang={lang} />
+        <PricingTeaser lang={lang} />
 
         <section className="py-16 md:py-20">
           <Reveal step>
@@ -155,6 +168,8 @@ export default function LandingClient() {
         </section>
         </div>
       </main>
+
+      <ClosingBand lang={lang} />
     </>
   );
 }
