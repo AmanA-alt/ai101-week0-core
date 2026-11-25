@@ -23,7 +23,9 @@
   --surface: #eeedea;
   --ink: #1d1c18;
   --deep: #2a281f;
-  --muted: #6b6a62;
+  /* Was #6b6a62, which reads at 4.2:1 on bone and fails WCAG AA. The
+     contrast test in tests/contrast.test.ts caught it. */
+  --muted: #5f5e57;
   --line: #cfccc5;
 
   --indigo: #243a68;
@@ -39,6 +41,73 @@
   --over: var(--cochineal);
 
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* The mascot keeps its own colours in both appearances: it is a logo. */
+  --g-bone: #e4e2df;
+  --g-indigo: #243a68;
+  --g-deep: #2a281f;
+  --g-cochineal: #9b2340;
+
+  color-scheme: light;
+}
+
+/*
+  Dark appearance.
+
+  The same brand at night rather than a different one: ink becomes the page,
+  bone becomes the text. Indigo and cochineal cannot be read on ink at their
+  light values (1.3:1 and 1.9:1), so they are lifted to tints of the same hue
+  that pass 4.5:1. Every pair is checked by tests/contrast.test.ts, which reads
+  this file, so the test cannot drift from what ships.
+*/
+[data-theme="dark"] {
+  --bone: #161512;
+  --surface: #211f1b;
+  --ink: #e4e2df;
+  --deep: #0e0d0b;
+  --muted: #a8a59c;
+  --line: #3a3832;
+
+  --indigo: #8fa3d1;
+  --indigo-soft: #232c40;
+  --cochineal: #e08a9d;
+  --cochineal-soft: #3a2228;
+
+  --paper: #161512;
+  --card: #211f1b;
+  --thread: #8fa3d1;
+  --caution: #d9a35a;
+  --over: #e08a9d;
+
+  color-scheme: dark;
+}
+
+/*
+  Panels that are dark in both appearances (indigo heroes, the deep band, the
+  customer's chat bubble) keep the light palette inside them, so bone text on
+  an indigo panel stays bone text on an indigo panel. Custom properties
+  cascade, so re-declaring them here is all it takes.
+*/
+[data-theme="dark"] .bg-\[var\(--indigo\)\],
+[data-theme="dark"] .bg-\[var\(--thread\)\],
+[data-theme="dark"] .bg-\[var\(--deep\)\],
+[data-theme="dark"] .keep-light {
+  --bone: #e4e2df;
+  --surface: #eeedea;
+  --ink: #1d1c18;
+  --muted: #5f5e57;
+  --line: #cfccc5;
+  --indigo: #243a68;
+  --cochineal: #9b2340;
+  --card: #eeedea;
+  --thread: #243a68;
+}
+[data-theme="dark"] .bg-\[var\(--deep\)\] { background-color: #0e0d0b; }
+[data-theme="dark"] .bg-white { background-color: var(--surface); }
+
+/* Changing appearance fades rather than snaps. */
+html.theme-fade, html.theme-fade * {
+  transition: background-color 0.45s var(--ease), color 0.45s var(--ease), border-color 0.45s var(--ease) !important;
 }
 
 html {
@@ -463,4 +532,49 @@ html { scroll-padding-top: 5rem; }
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Appearance switch: the two icons cross-fade and rotate past each other. */
+.theme-toggle {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--indigo);
+  transition: border-color 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+}
+.theme-toggle:hover { border-color: var(--indigo); }
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle-icon { position: relative; width: 18px; height: 18px; }
+.theme-toggle-icon svg {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.45s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.theme-toggle-icon[data-theme-icon="light"] svg:first-child,
+.theme-toggle-icon[data-theme-icon="dark"] svg:last-child { opacity: 1; transform: none; }
+.theme-toggle-icon[data-theme-icon="light"] svg:last-child { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+.theme-toggle-icon[data-theme-icon="dark"] svg:first-child { opacity: 0; transform: rotate(90deg) scale(0.6); }
+
+/* Demo page: step chips and agent map arrows. */
+.demo-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+  transition: color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+.demo-chip:hover { color: var(--indigo); border-color: var(--indigo); background: var(--surface); }
+.agent-arrow { display: none; }
+@media (min-width: 1024px) {
+  .agent-arrow { display: block; right: -12px; top: 50%; transform: translateY(-50%); z-index: 1; font-size: 12px; }
+  .agent-stage:nth-child(4n) .agent-arrow { display: none; }
 }

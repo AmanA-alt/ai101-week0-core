@@ -3,8 +3,8 @@
  *
  * The body is cloth with a pinked hem and a stitched line, a size tag hangs
  * from one side, and a headset says it is live and on duty. It is drawn with
- * the brand's own four colours, through the CSS variables, so it follows the
- * palette wherever the palette goes.
+ * the brand's four colours, held in --g-* variables that do not change with
+ * the appearance: the ghost is the logo, so it looks the same in light and dark.
  *
  * Motion is transform and opacity only, so the browser never has to recalculate
  * layout and it stays smooth on an ordinary phone. Every animation stops for
@@ -52,13 +52,13 @@ export default function Ghost({
       className={`ghost ghost--${motion} ghost--${state} ${className}`}
       style={{ overflow: "visible" }}
     >
-      <ellipse className="ghost-shadow" cx="100" cy="222" rx="46" ry="5" fill="var(--ink)" />
+      <ellipse className="ghost-shadow" cx="100" cy="222" rx="46" ry="5" fill="#000" />
 
       <g className="ghost-body">
         <path
           d={HEM}
-          fill="var(--bone)"
-          stroke="var(--indigo)"
+          fill="var(--g-bone)"
+          stroke="var(--g-indigo)"
           strokeWidth={detailed ? 2 : 1.5}
           strokeLinejoin="miter"
           vectorEffect="non-scaling-stroke"
@@ -67,7 +67,7 @@ export default function Ghost({
         {detailed && (
           <path
             d="M50 174 L150 174"
-            stroke="var(--cochineal)"
+            stroke="var(--g-cochineal)"
             strokeWidth="1.5"
             strokeDasharray="5 4"
             vectorEffect="non-scaling-stroke"
@@ -78,29 +78,29 @@ export default function Ghost({
         <path
           d="M54 100 C50 16 150 16 146 100"
           fill="none"
-          stroke="var(--deep)"
+          stroke="var(--g-deep)"
           strokeWidth="5"
           strokeLinecap="butt"
         />
-        <rect x="44" y="86" width="15" height="28" rx="3" fill="var(--deep)" />
-        <rect x="141" y="86" width="15" height="28" rx="3" fill="var(--deep)" />
+        <rect x="44" y="86" width="15" height="28" rx="3" fill="var(--g-deep)" />
+        <rect x="141" y="86" width="15" height="28" rx="3" fill="var(--g-deep)" />
         {detailed && (
           <>
             <path
               d="M52 114 Q58 138 82 136"
               fill="none"
-              stroke="var(--deep)"
+              stroke="var(--g-deep)"
               strokeWidth="3"
               strokeLinecap="butt"
             />
-            <rect x="81" y="132" width="8" height="8" fill="var(--deep)" />
+            <rect x="81" y="132" width="8" height="8" fill="var(--g-deep)" />
           </>
         )}
 
         {/* Eyes: the inner group scans, each eye blinks on its own box */}
         <g className="ghost-gaze">
-          <rect className="ghost-eye" x="78" y="88" width="12" height="20" rx="6" fill="var(--indigo)" />
-          <rect className="ghost-eye" x="110" y="88" width="12" height="20" rx="6" fill="var(--indigo)" />
+          <rect className="ghost-eye" x="78" y="88" width="12" height="20" rx="6" fill="var(--g-indigo)" />
+          <rect className="ghost-eye" x="110" y="88" width="12" height="20" rx="6" fill="var(--g-indigo)" />
         </g>
 
         {state === "talking" ? (
@@ -111,13 +111,13 @@ export default function Ghost({
             width="18"
             height="9"
             rx="4.5"
-            fill="var(--cochineal)"
+            fill="var(--g-cochineal)"
           />
         ) : (
           <path
             d="M92 121 Q100 128 108 121"
             fill="none"
-            stroke="var(--indigo)"
+            stroke="var(--g-indigo)"
             strokeWidth="2"
             vectorEffect="non-scaling-stroke"
           />
@@ -127,11 +127,11 @@ export default function Ghost({
         <g className="ghost-tag">
           <path
             d="M158 138 L165 149"
-            stroke="var(--indigo)"
+            stroke="var(--g-indigo)"
             strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
-          <rect x="152" y="148" width="40" height="22" rx="2" fill="var(--cochineal)" />
+          <rect x="152" y="148" width="40" height="22" rx="2" fill="var(--g-cochineal)" />
           {detailed && (
             <text
               x="172"
@@ -140,7 +140,7 @@ export default function Ghost({
               fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
               fontSize="9"
               letterSpacing="0.5"
-              fill="var(--bone)"
+              fill="var(--g-bone)"
             >
               {state === "handoff" ? "→ YOU" : "S M L"}
             </text>
