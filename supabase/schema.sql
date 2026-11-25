@@ -144,3 +144,28 @@ create table if not exists chat_feedback (
 );
 
 create index if not exists chat_feedback_created_at_idx on chat_feedback (created_at desc);
+
+-- Week 6: external user tests.
+--
+-- One row per tester. No names, phone numbers or contact details: a tester
+-- code (T1 to T5) and the segment they belong to. Rows are entered by hand in
+-- the table editor after each session, so there is no public write route. The
+-- check constraint makes it impossible to store a row without consent.
+create table if not exists user_tests (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  tester_code text not null,
+  segment text not null,
+  device text,
+  task_agent boolean not null default false,
+  task_refusal boolean not null default false,
+  task_dashboard boolean not null default false,
+  task_inventory boolean not null default false,
+  completed_tasks integer not null default 0 check (completed_tasks between 0 and 4),
+  issues text,
+  quote text,
+  would_use text check (would_use in ('yes', 'maybe', 'no')),
+  consent boolean not null check (consent = true)
+);
+
+create index if not exists user_tests_created_at_idx on user_tests (created_at desc);
