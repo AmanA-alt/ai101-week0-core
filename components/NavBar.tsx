@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const LINKS = [
   { href: "/", label: "Home" },
+  { href: "/chat", label: "Chat" },
   { href: "/core", label: "Agent" },
   { href: "/research", label: "Research" },
   { href: "/product", label: "Product" },
@@ -15,7 +16,7 @@ export default function NavBar() {
     <nav className="border-b border-[var(--line)]">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-4">
         <Link href="/" className="text-base font-medium tracking-tight">
-          Respondo
+          Bastilla
         </Link>
         <div className="flex items-center gap-4">
           {LINKS.map((l) => (
