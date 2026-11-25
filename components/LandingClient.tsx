@@ -46,10 +46,10 @@ const ROADMAP: { title: { es: string; en: string }; status: Status }[] = [
   },
   {
     title: {
-      es: "Subir tu inventario desde una hoja de cálculo",
-      en: "Import your inventory from a spreadsheet",
+      es: "Tu inventario desde una hoja de cálculo, guardado solo en tu dispositivo",
+      en: "Your inventory from a spreadsheet, saved only on your device",
     },
-    status: "building",
+    status: "shipped",
   },
   {
     title: { es: "Apartados", en: "Layaway tracking" },

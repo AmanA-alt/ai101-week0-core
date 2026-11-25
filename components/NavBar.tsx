@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Ghost from "./Ghost";
+import ThemeToggle from "./ThemeToggle";
 
 /**
  * The product bar.
@@ -13,7 +14,7 @@ import Ghost from "./Ghost";
  * carries an underline that slides between tabs, and hover draws the same line
  * in from the centre. Everything moves on transform, so it stays smooth.
  *
- * Below 768px the links fold behind a menu button into a full-height panel,
+ * Below 1280px the links fold behind a menu button into a full-height panel,
  * because wrapped links on three lines read as broken, not as navigation.
  */
 
@@ -22,7 +23,12 @@ type NavLink = { href: string; label: string };
 const GROUPS: { label: string; links: NavLink[] }[] = [
   {
     label: "Tool",
-    links: [{ href: "/core", label: "Agent" }],
+    links: [
+      { href: "/chat", label: "Chat" },
+      { href: "/core", label: "Agent" },
+      { href: "/inventory", label: "Inventory" },
+      { href: "/dashboard", label: "Dashboard" },
+    ],
   },
   {
     label: "Venture",
@@ -42,6 +48,7 @@ const GROUPS: { label: string; links: NavLink[] }[] = [
 export const NAV_LINKS: NavLink[] = [
   { href: "/", label: "Home" },
   ...GROUPS.flatMap((g) => g.links),
+  { href: "/demo", label: "Demo" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -77,14 +84,14 @@ export default function NavBar() {
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <nav
         aria-label="Main"
-        className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-6 px-6"
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6"
       >
         <Link href="/" className="nav-brand" aria-label="Bastilla, home">
           <Ghost size={30} motion="none" label="Bastilla logo" />
           <span>Bastilla</span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-0.5 xl:flex">
           {GROUPS.map((g, gi) => (
             <div key={g.label} className="flex items-center">
               {gi > 0 && <span aria-hidden="true" className="nav-sep" />}
@@ -103,13 +110,18 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/core" className="nav-cta hidden sm:inline-flex">
-            Try the agent
+          <ThemeToggle />
+          <Link
+            href="/demo"
+            aria-current={isActive(pathname, "/demo") ? "page" : undefined}
+            className="nav-cta hidden sm:inline-flex"
+          >
+            Demo
             <span aria-hidden="true" className="nav-cta-arrow">→</span>
           </Link>
           <button
             type="button"
-            className="nav-burger md:hidden"
+            className="nav-burger xl:hidden"
             aria-expanded={open}
             aria-controls="nav-panel"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -121,7 +133,7 @@ export default function NavBar() {
         </div>
       </nav>
 
-      <div id="nav-panel" className={`nav-panel md:hidden ${open ? "nav-panel--open" : ""}`} hidden={!open}>
+      <div id="nav-panel" className={`nav-panel xl:hidden ${open ? "nav-panel--open" : ""}`} hidden={!open}>
         <div className="mx-auto max-w-5xl px-6 pb-10 pt-4">
           {[{ label: "", links: [{ href: "/", label: "Home" }] }, ...GROUPS].map((g, gi) => (
             <div key={g.label || "home"} className="border-t border-[var(--line)] py-4 first:border-t-0">
@@ -139,8 +151,8 @@ export default function NavBar() {
               ))}
             </div>
           ))}
-          <Link href="/core" className="nav-cta mt-4 flex w-full justify-center">
-            Try the agent <span aria-hidden="true">→</span>
+          <Link href="/demo" className="nav-cta mt-4 flex w-full justify-center">
+            Guided demo <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>
