@@ -4,7 +4,7 @@ import { SEGMENTS, CAPABILITY_GROUPS } from "@/lib/product-data";
 import { TIERS, type TierId } from "@/lib/pricing";
 
 export const metadata = {
-  title: "Product architecture — Respondo",
+  title: "Product architecture — Bastilla",
   description:
     "Two customer segments, four capability groups and three tiers, built from the gaps competitors leave open.",
 };

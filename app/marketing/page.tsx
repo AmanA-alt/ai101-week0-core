@@ -1,7 +1,7 @@
 import MarketingClient from "@/components/MarketingClient";
 
 export const metadata = {
-  title: "Marketing engine — Respondo",
+  title: "Marketing engine — Bastilla",
   description:
     "Brand system, target persona, landing copy, ten social posts, three video scripts, a 14-day campaign and the live A/B test running on the landing page.",
 };

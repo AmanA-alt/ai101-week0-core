@@ -25,7 +25,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Respondo — AI sales agent for clothing resellers",
+  title: "Bastilla — AI sales agent for clothing resellers",
   description:
     "An AI agent that answers customer questions from real catalog data and builds a basket, with a human confirming every order.",
 };

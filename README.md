@@ -1,4 +1,4 @@
-# Respondo — AI sales agent for clothing resellers
+# Bastilla — AI sales agent for clothing resellers
 
 An AI agent for one-person clothing resellers in Mexico. Customers ask about items in a
 chat; the agent answers only from real catalog data and assembles a basket. Nothing
